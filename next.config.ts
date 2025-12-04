@@ -1,7 +1,9 @@
-import type { NextConfig } from "next";
+import type { NextConfig } from "next"
 
 const nextConfig: NextConfig = {
-  /* config options here */
-};
+  env: {
+    WORKER_URL: process.env.WORKER_URL,
+  },
+}
 
-export default nextConfig;
+export default nextConfig

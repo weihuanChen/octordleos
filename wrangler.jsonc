@@ -1,0 +1,50 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "octordle",
+  "main": ".open-next/worker.js",
+  "compatibility_date": "2025-11-21",
+  "compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
+  "assets": {
+    "directory": ".open-next/assets",
+    "binding": "ASSETS"
+  },
+  // R2 bucket used by OpenNext to back incremental cache data
+  "r2_buckets": [
+    {
+      "binding": "NEXT_INC_CACHE_R2_BUCKET",
+      "bucket_name": "cache"
+    }
+  ],
+  "services": [
+    {
+      "binding": "WORKER_SELF_REFERENCE",
+      "service": "octordle"
+    }
+  ],
+   // D1 Tag Cache (Next mode)
+  // This is only required if you use On-demand revalidation
+  "d1_databases": [
+    {
+      "binding": "NEXT_TAG_CACHE_D1",
+      "database_id": "f5e7d957-3833-4a5a-9617-0901b1c409a3",
+      "database_name": "next-octordle"
+    }
+  ],
+    // DO Queue
+    "durable_objects": {
+      "bindings": [
+        {
+          "name": "NEXT_CACHE_DO_QUEUE",
+          "class_name": "DOQueueHandler"
+        }
+      ]
+    },
+    "migrations": [
+      {
+        "tag": "v1",
+        "new_sqlite_classes": [
+          "DOQueueHandler"
+        ]
+      }
+    ]
+}
